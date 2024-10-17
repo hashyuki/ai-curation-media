@@ -12,6 +12,7 @@ import { EmptyScreen } from './empty-screen'
 import Textarea from 'react-textarea-autosize'
 import { generateId } from 'ai'
 import { useAppState } from '@/lib/utils/app-state'
+import { BlogCards } from './blog-cards'
 
 interface ChatPanelProps {
   messages: UIState
@@ -32,15 +33,15 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
   const [isComposing, setIsComposing] = useState(false) // Composition state
   const [enterDisabled, setEnterDisabled] = useState(false) // Disable Enter after composition ends
 
-  const handleCompositionStart = () => setIsComposing(true);
+  const handleCompositionStart = () => setIsComposing(true)
 
   const handleCompositionEnd = () => {
-    setIsComposing(false);
-    setEnterDisabled(true);
+    setIsComposing(false)
+    setEnterDisabled(true)
     setTimeout(() => {
-      setEnterDisabled(false);
-    }, 300);
-  };
+      setEnterDisabled(false)
+    }, 300)
+  }
 
   async function handleQuerySubmit(query: string, formData?: FormData) {
     setInput(query)
@@ -127,10 +128,10 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
   return (
     <div
       className={
-        'fixed bottom-8 left-0 right-0 top-10 mx-auto h-screen flex flex-col items-center justify-center'
+        'fixed top-12 left-0 right-0 mx-screen max-h-screen overflow-y-auto flex flex-col items-center'
       }
     >
-      <form onSubmit={handleSubmit} className="max-w-2xl w-full px-6">
+      <form onSubmit={handleSubmit} className="max-w-2xl w-full px-6 mt-64">
         <div className="relative flex items-center w-full">
           <Textarea
             ref={inputRef}
@@ -203,6 +204,9 @@ export function ChatPanel({ messages, query }: ChatPanelProps) {
           className={cn(showEmptyScreen ? 'visible' : 'invisible')}
         />
       </form>
+      <div className="p-6 mb-12">
+        <BlogCards />
+      </div>
     </div>
   )
 }
