@@ -8,6 +8,8 @@ import Footer from '@/components/footer'
 import { Sidebar } from '@/components/sidebar'
 import { Toaster } from '@/components/ui/sonner'
 import { AppStateProvider } from '@/lib/utils/app-state'
+import { AI } from './actions'
+import { generateId } from 'ai'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -46,6 +48,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const id = generateId()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
@@ -56,11 +60,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AppStateProvider>
-            <Header />
-            {children}
-            <Sidebar />
-            <Footer />
-            <Toaster />
+            <AI initialAIState={{ chatId: id, messages: [] }}>
+              <Header />
+              {children}
+              <Sidebar />
+              <Footer />
+              <Toaster />
+            </AI>
           </AppStateProvider>
         </ThemeProvider>
       </body>

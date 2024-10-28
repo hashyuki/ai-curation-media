@@ -130,7 +130,7 @@ const exampleMessages = [
     tags: ['AI', 'tech']
   }
 ]
-type BlogCards = {
+type BlogCarousel = {
   heading: string
   message: string
   image: string
@@ -140,65 +140,80 @@ type BlogCards = {
   tags: string[] // 追加
 }
 
-export function BlogCards() {
-  const [selectedMessage, setSelectedMessage] = useState<BlogCards | null>(null)
+export function BlogCarousel() {
+  const [selectedMessage, setSelectedMessage] = useState<BlogCarousel | null>(
+    null
+  )
 
-  const onClickCard = (message: BlogCards) => {
+  const onClickCard = (message: BlogCarousel) => {
     setSelectedMessage(message)
   }
 
   const closePopup = () => setSelectedMessage(null)
 
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-8 sm:w-fit">
-        {exampleMessages.map((message, index) => (
-          <Card
-            key={index}
-            className="relative h-96 cursor-pointer hover:shadow-lg transition-all duration-200 overflow-hidden group"
-            onClick={() => onClickCard(message)}
-          >
-            <CardContent className="p-0 h-full flex flex-col">
-              <div className="relative">
-                <Image
-                  className="w-full h-48 object-cover transition-transform duration-200"
-                  width={512}
-                  height={512}
-                  src={message.image}
-                  alt="image"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-              </div>
-              <div className="p-4 flex-1 flex flex-col">
-                <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-500 transition-colors">
-                  {message.heading}
-                </h3>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {message.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="px-2 py-1 text-xs border border-red-600 rounded-full bg-background/40 text-red-600"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="text-xs text-muted-foreground mt-auto">
-                  {formatDateWithTime(message.createdAt)}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <div>
+      <Carousel
+        opts={{
+          align: 'start',
+          loop: true
+        }}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-4">
+          {exampleMessages.map((message, index) => (
+            <CarouselItem key={index} className="basis-1/2 md:basis-1/3">
+              <Card
+                key={index}
+                className="relative h-96 cursor-pointer hover:shadow-lg transition-all duration-200 overflow-hidden group"
+                onClick={() => onClickCard(message)}
+              >
+                <CardContent className="p-0 h-full flex flex-col">
+                  <div className="relative">
+                    <Image
+                      className="w-full h-48 object-cover transition-transform duration-200"
+                      width={512}
+                      height={512}
+                      src={message.image}
+                      alt="image"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-500 transition-colors">
+                      {message.heading}
+                    </h3>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {message.tags.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="px-2 py-1 text-xs border border-red-600 rounded-full bg-background/40 text-red-600"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-auto">
+                      {formatDateWithTime(message.createdAt)}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselNext variant="ghost" />
+        <CarouselPrevious variant="ghost" />
+      </Carousel>
+
       {selectedMessage && (
         <>
           <div
-            className="fixed inset-0 bg-gray-900 bg-opacity-80"
+            className="fixed inset-0 bg-gray-900 bg-opacity-80 z-40"
             onClick={closePopup}
           ></div>
 
-          <div className="fixed inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center z-50">
             <Card className="relative p-4 w-11/12 md:w-5/6 lg:w-3/4 xl:w-2/3 2xl:w-[82rem] h-11/12 sm:h-2/5">
               <CardContent className="p-3">
                 <Image
